@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import {Form, Button, Container, Row, Col, InputGroup} from 'react-bootstrap';
 import {IconButton, Input, InputAdornment} from "@material-ui/core";
@@ -6,26 +6,17 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import './Login.css';
 import Swal from 'sweetalert2';
+import Signup from '../signup/Signup';
 
-
-export default function Login() {
+export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState({
         password: '',
         showPassword: false
     });
-    const [accounts, setAccount] = useState(
-        [
-            {
-                username: "jooie",
-                password: "123456"
-            },
-            {
-                username: "admin",
-                password: "admin"
-            }
-        ]
-    );
+
+    const [accounts, setAccounts] = useState([]);
+    console.log(accounts);
     //console.log(accounts);
     const [alert, setAlert] = useState(false);
 
@@ -59,6 +50,11 @@ export default function Login() {
         });
     }
 
+    function onValidateInput(event) {
+        if (event.target.value === '') setAlert(true)
+        else setAlert(false);
+    }
+
     return (
         <div style={{textAlign:"left"}}>
             <Container className="login-container"  style={{paddingBottom: "200px", marginLeft: "157px"}}>
@@ -75,7 +71,7 @@ export default function Login() {
                             </Form.Group>
                             
                             <Form.Group>
-                                <Form.Control className="form-input-box" value={username} placeholder="Tên đăng nhập" onChange={event => setUsername(event.target.value)}/>
+                                <Form.Control className="form-input-box" value={username} placeholder="Tên đăng nhập" onChange={event => {setUsername(event.target.value); onValidateInput(event)}}/>
                             </Form.Group>
 
                             {alert === true ? <h6 style={{ color: "red" }}>Bạn phải nhập đầy đủ thông tin đăng nhập</h6> : null}
@@ -85,12 +81,12 @@ export default function Login() {
                                         <Form.Control
                                             type={password.showPassword ? "text" : "password"}
                                             value={password.password}
-                                            onChange={event => setPassword({...password, password: event.target.value})}
+                                            onChange={event => {setPassword({...password, password: event.target.value}); onValidateInput(event)}}
                                             placeholder="Mật khẩu"
-                                            style={{borderTop: "none", borderLeft: "none", borderRight: "none", height: "inherit", backgroundColor: "#F3F6FF"}}
+                                            style={{borderTop: "none", borderLeft: "none", borderRight: "none", height: "inherit"}}
                                         />
                                         <InputGroup.Append>
-                                            <IconButton style={{color: "#3626EB"}} onClick={handleClickShowPassword}>
+                                            <IconButton style={{color: "#3626EB"}} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                                                 {password.showPassword ? <Visibility/> : <VisibilityOff/>}
                                             </IconButton>
                                         </InputGroup.Append>
@@ -101,7 +97,7 @@ export default function Login() {
                                 <a className="form-link" style={{fontSize:"16px", fontWeight:"600"}} href="/forgot-password">Quên mật khẩu?</a>
                             </div>
 
-                            <Button type="submit" className="submit-button" onClick=""> Đăng nhập </Button>
+                            <Button type="submit" className="submit-button"> Đăng nhập </Button>
 
                             <p style={{marginTop: "20px"}}>Hoặc đăng nhập bằng</p>
 
