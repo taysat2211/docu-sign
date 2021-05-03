@@ -5,9 +5,6 @@
 #root{
   width: 100%;
   min-height: 100%;
-  background-image: url('/src/assets/auth-background.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  font-family: 'Be Vietnam', sans-serif;
+  background-image: none;
+	font-family: 'Be Vietnam', sans-serif;
 }
