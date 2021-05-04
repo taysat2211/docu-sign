@@ -6,9 +6,6 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-.login-container {
-	margin-top: 100px;
-}
 .login-container .login-form {
 	width: 454px;
 	display: inline-block;
@@ -43,6 +40,51 @@
 	border: 1px solid #d6d6d6;
 	border-radius: 6px;
 }
+
+    .login-container .login-form {
+        width: 454px;
+        display: inline-block;
+        text-align: left;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: #FFFFFF;
+        padding: 30px;
+        font-style: normal;
+    }
+        .login-container .login-form .form-name {
+            color:#24305E;
+            font-size: 18px;
+            font-weight: 700; 
+            line-height: 26px; 
+            text-transform: uppercase;
+        }
+        .login-container .login-form .form-text {
+            color: #201934;
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 23px; 
+        }
+            .login-container .login-form .form-link {
+                color: #3626EB;
+                font-size: 18px;
+                font-weight: 700;
+            }
+        .login-container .login-form .form-input-box {
+            height: 56px;
+            background-color: #FFFFFF, 8%;
+            border: 1px solid #D6D6D6;
+            border-radius: 6px;
+        }
+
+        .login-container .login-form .submit-button {
+            width: 394px;
+            height: 56px;
+            margin-top: 20px;
+            background-color: #3626EB;
+            color: #FFFFFF;
+            font-size: 18px;
+            font-weight: 700;
+        }
 
 .login-container .login-form .submit-button {
 	width: 394px;

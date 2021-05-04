@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { Form, Button, Container, Row, Col, InputGroup } from 'react-bootstrap';
 import { IconButton, Input, InputAdornment } from '@material-ui/core';
@@ -6,6 +6,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import './Login.css';
 import Swal from 'sweetalert2';
+import { login } from '../../axios/authorization/Login'
 
 export default function Login() {
 	const [ username, setUsername ] = useState('');
@@ -81,9 +82,7 @@ export default function Login() {
 								/>
 							</Form.Group>
 
-							{alert === true ? (
-								<h6 style={{ color: 'red' }}>Bạn phải nhập đầy đủ thông tin đăng nhập</h6>
-							) : null}
+                            <Button type="submit" className="submit-button"> Đăng nhập </Button>
 
 							<Form.Group style={{ marginTop: '16px', marginBottom: '0' }}>
 								<InputGroup className="form-input-box">
