@@ -2,12 +2,13 @@
     color: #8A4DC0;
 }
 
-.primary-button{
-    background-color: blue;
-    color: white;
-    border-radius: 5px;
-}
-
 .bg-gray{
     background-color: #EEF1F1;
+}
+
+.file-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
