@@ -1,23 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
 import {Form, Button, Container, Row, Col, InputGroup} from 'react-bootstrap';
-import {IconButton, Input, InputAdornment} from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import './Login.css';
 import Swal from 'sweetalert2';
-import Signup from '../signup/Signup';
+import { login } from '../../axios/authorization/Login'
 
-export default function Login(props) {
+
+export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState({
         password: '',
         showPassword: false
     });
-
-    const [accounts, setAccounts] = useState([]);
-    console.log(accounts);
-    //console.log(accounts);
+    
     const [alert, setAlert] = useState(false);
 
     function handleClickShowPassword () {
@@ -28,26 +26,35 @@ export default function Login(props) {
         event.preventDefault();
     };
 
-    function onFormSubmit(event) {
+    const isAuthenticated = async () => {
+        const userInfo = await login(username, password.password);
+        console.log(userInfo);
+        if (userInfo === null) return false;
+        return true;
+    }
+
+    const onFormSubmit = async (event) => {
         event.preventDefault();
         if (username === '' || password === '') {
             return setAlert(true);
         }
-        const result = accounts.find((account) => account.username === username);
-        if (result.password === password.password) {
+
+        if (await isAuthenticated()) {
             return Swal.fire({
                 title: 'Thành công',
                 text: 'Đăng nhập thành công',
                 icon: 'success',
                 confirmButtonText: 'Cool'
             });
+        } else {
+        
+            return Swal.fire({
+                title: 'Thất bại',
+                text: 'Tên đăng nhập hoặc mật khẩu sai',
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            });
         }
-        Swal.fire({
-            title: 'Thất bại',
-            text: 'Tên đăng nhập hoặc mật khẩu sai',
-            icon: 'error',
-            confirmButtonText: 'Cool'
-        });
     }
 
     function onValidateInput(event) {

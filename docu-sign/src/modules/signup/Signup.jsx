@@ -1,19 +1,15 @@
 import React from 'react'
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import {Form, Button, Container, Row, Col, InputGroup} from 'react-bootstrap'
-import {IconButton, Input, InputAdornment} from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Swal from 'sweetalert2';
 import '../login/Login.css';
+import { signup } from '../../axios/users/Signup';
 
 export default function Signup() {
-    const [accounts, setAccounts] = useState([
-        {
-            email: 'admin',
-            password: 'admin'
-        },
-    ]);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState({
         password: '',
@@ -24,9 +20,14 @@ export default function Signup() {
         showConfirmPassword: false
     });
 
+    const [user, setUser] = useState({
+        username: '', password: '', role: 'user', firstName: 'empty', lastName: 'empty', 
+        address: 'empty', phoneNumber: 'empty', email: ''
+    });
+
     const [alert, setAlert] = useState(false);
     const [same, setSame] = useState(true);
-
+    const history = useHistory();
 
     function handleClickShowPassword () {
         setPassword({ ...password, showPassword: !password.showPassword });
@@ -44,7 +45,7 @@ export default function Signup() {
         event.preventDefault();
     };
 
-    function onFormSubmit (event) {
+    async function onFormSubmit (event) {
         event.preventDefault();
         if (email === '') {
             return setAlert(true);
@@ -59,14 +60,33 @@ export default function Signup() {
         }
         
         setAlert(false);
+
         setSame(true);
 
-        accounts.push({
-            email: email,
-            password: password.password
-        });
+        //console.log(email + ' ' + password.password);
+        //setUserInfo({...userInfo, username: email});
+        //console.dir(userInfo);
+        user.email = email;
+        user.username = email;
+        user.password = password.password;
+        setUser(user);
+        
+        console.dir(user);
 
-        setAccounts(accounts);
+        const response = await signup(user);
+
+
+        if (!response) {
+            localStorage.setItem('success-signup', false);
+        } else {
+            localStorage.setItem('success-signup', true);
+            localStorage.setItem('user-email', email);
+        }
+
+        const res = localStorage.getItem('success-signup');
+        console.log(res);
+        const newPath = '/signup-notification';
+        history.push(newPath);
     }
 
     function onValidateInput(event) {
