@@ -14,7 +14,7 @@ function App() {
 				<Switch>
 					<Route exact path="/" component={Login} />
 					<Route path="/signup" component={Signup} />
-          <Route path="/signup-notification" component={Notice} />
+          			<Route path="/signup-notification" component={Notice} />
 					<Route path="/file/detail/1" component={Detail} />
 				</Switch>
 		</Router>

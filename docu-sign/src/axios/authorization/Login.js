@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../../config/default.json';
 
-export const login = async (username, password) => {
+export const Login = async (username, password) => {
     try {
         const response = await axios.post(`${config.backendBaseURL}/auth/login`, { username: username, password: password });
         return response.data;
@@ -10,4 +10,3 @@ export const login = async (username, password) => {
         return null;
     }
 };
-

@@ -6,7 +6,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import './Login.css';
 import Swal from 'sweetalert2';
-import { login } from '../../axios/authorization/Login'
+import { login } from '../../axios/authorization/Login';
+import Menu from '../../components/Menu'
 
 export default function Login() {
 	const [ username, setUsername ] = useState('');
@@ -59,7 +60,8 @@ export default function Login() {
 
 	return (
 		<div className="background-authen" style={{ textAlign: 'left', marginTop:"0" }}>
-			<Container className="login-container" style={{ paddingBottom: '200px', marginLeft: '157px' }}>
+			<Menu />
+			<Container className="login-container" style={{ paddingBottom: '200px', marginLeft: '157px', marginTop: '50px' }}>
 				<Row xs={1} md={2}>
 					<Col>
 						<Form className="login-form" onSubmit={onFormSubmit}>
@@ -81,8 +83,6 @@ export default function Login() {
 									onChange={(event) => setUsername(event.target.value)}
 								/>
 							</Form.Group>
-
-                            <Button type="submit" className="submit-button"> Đăng nhập </Button>
 
 							<Form.Group style={{ marginTop: '16px', marginBottom: '0' }}>
 								<InputGroup className="form-input-box">
