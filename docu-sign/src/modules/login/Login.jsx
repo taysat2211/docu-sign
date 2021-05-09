@@ -64,7 +64,7 @@ export default function Login() {
     }
 
     return (
-        <div style={{textAlign:"left"}}>
+        <div className="background-authen" style={{textAlign:"left"}}>
 			<Menu />
             <Container className="login-container"  style={{paddingBottom: "200px", marginLeft: "157px"}}>
                 <Row xs={1} md={2}>

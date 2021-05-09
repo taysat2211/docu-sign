@@ -1,10 +1,12 @@
 import React from 'react'
 import {Form, Button, Container, Row, Col} from 'react-bootstrap'
 import '../login/Login.css'
+import Menu from '../../components/Menu';
 
 export default function signup() {
     return (
-        <div style={{textAlign:"left"}}>
+        <div className="background-authen" style={{textAlign:"left"}}>
+            <Menu />
             <Container className="login-container"  style={{paddingBottom: "200px"}}>
                 <Row xs={1} md={2} className="justify-content-md-between">
                     <Col>
