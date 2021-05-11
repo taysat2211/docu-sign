@@ -12,34 +12,26 @@
     background: #F3F6FF
 }
 #bestsign_01{
-/* logo/BestSign/color */
+    width: 153px;
+    height: 53px;
+    left: 85px;
+    top: 20px;
 
-/* position: absolute; */
-width: 153px;
-height: 53px;
-left: 85px;
-top: 20px;
-
-font-family: Be Vietnam;
-font-style: normal;
-font-weight: 600;
-font-size: 25px;
-line-height: 53px;
-text-align:center;
-color:#3626EB;
-/* identical to box height */
+    font-family: Be Vietnam;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 53px;
+    text-align:center;
+    color:#3626EB;
 }
 #upload_01{
-    /* Rectangle 4 */
+    height: 40px;
+    left: 20px;
+    top: 103px;
 
-/* position: absolute; */
-/* width: 248px; */
-height: 40px;
-left: 20px;
-top: 103px;
-
-background: #3626EB;
-border-radius: 6px;
+    background: #3626EB;
+    border-radius: 6px;
 }
 #bt_01{
     margin-top: 10px;
@@ -50,12 +42,9 @@ border-radius: 6px;
     background: #F3F6FF;
 }
 .avatar {
-    /* margin-right: 10px; */
-    width: 50px;
     height: 50px;
     border-radius: 100%;
     position:absolute;
-    /* margin-right: 10px; */
   }
   .pdf_prototype{
     width: 50px;
@@ -63,7 +52,6 @@ border-radius: 6px;
   }
   
   .react-pdf__Page__canvas{
-    /* margin: 0 auto; */
     width: 100px !important;
     height: auto !important;
 
@@ -76,32 +64,22 @@ border-radius: 6px;
     margin-top: 10px;
 }
 #listcontractcustom{
-    /* Danh mục hợp đồng */
+    width: 145px;
+    height: 22px;
+    left: 20px;
+    top: 189px;
 
-
-width: 145px;
-height: 22px;
-left: 20px;
-top: 189px;
-
-font-family: Be Vietnam;
-font-style: normal;
-font-weight: normal;
-font-size: 12px;
-line-height: 22px;
-/* identical to box height */
-
-/* Text */
-color: #201934;
-
-opacity: 0.7;
-
+    font-family: Be Vietnam;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 22px;
+    color: #201934;
+    opacity: 0.7;
 }
 
 
 #account_custom{
-    /* Tài khoản */
-
     width: 145px;
     height: 22px;
     left: 20px;
@@ -112,46 +90,34 @@ opacity: 0.7;
     font-weight: normal;
     font-size: 12px;
     line-height: 22px;
-    /* identical to box height */
-    
-    /* Text */
-    color: #201934;
-    
+    color: #201934; 
     opacity: 0.7;
-
 }
 
 #ctr_1{
-    /* Hợp đồng đã nhận */
+    width: 210px;
+    height: 35px;
+    left: 314px;
+    top: 100px;
 
-width: 210px;
-height: 35px;
-left: 314px;
-top: 100px;
+    font-family: Be Vietnam;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 20px;
+    line-height: 35px;
+    color: #201934;
 
-font-family: Be Vietnam;
-font-style: normal;
-font-weight: 100;
-font-size: 20px;
-line-height: 35px;
-/* identical to box height */
+    opacity: 0.9;
 
-/* Text */
-color: #201934;
-
-opacity: 0.9;
-
-margin-bottom: 15px;
-
+    margin-bottom: 15px;
 }
 
 
 .cus_button{
-margin-right: 10px;
-width: 12px;
-background: #F3F6FF;
-border-radius: 30px;
-
+    margin-right: 10px;
+    width: 12px;
+    background: #F3F6FF;
+    border-radius: 30px;
 }
 .mg{
     margin-bottom: 10px;
@@ -164,6 +130,51 @@ border-radius: 30px;
     height: 10px;
     width: 15px;
 }
+.avatar {
+    vertical-align: middle;
+    width: 50px;
+    height:50px;
+    border-radius: 50% !important;
+    right: 50px;
+    margin-top: 4px;
+  }
 
+  .HelloText{
+    position: absolute;
+    width: 120px;
+    height: 44px;
+    left: 1130px;
+    top: 10px;
+
+    font-family: Be Vietnam;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 22px;
+
+    color: #201934;
+}
+
+.ddown-custom{
+    right:500px !important;
+}
+.signed{
+    color: #11954A;
+    font-weight:800;
+    font-size: 16px;
+}
+.waiting{
+    color: #DD7518;
+    font-weight: 800;
+    font-size: 16px;
+}
+.fail{
+    font-weight: 800;
+    font-size: 16px;
+    color:  #DF0909;
+}
+.marg{
+    margin-right: 5px;
+}
 
 
