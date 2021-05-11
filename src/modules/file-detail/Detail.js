@@ -41,14 +41,14 @@ const Detail = () => {
 				<div className="col-sm-2 bg-gray">
 					<p>Tác vụ</p>
 					<div class="list-group">
-						<button className="list-group-item list-group-item-action">
+						<div className="list-group-item list-group-item-action">
 							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
 							Thêm chữ ký
-						</button>
-						<button className="list-group-item list-group-item-action">
+						</div>
+						<div className="list-group-item list-group-item-action">
 							<i className="fas fa-stamp" style={{ marginRight: '1em' }} />
 							Thêm dấu mộc
-						</button>
+						</div>
 					</div>
 				</div>
 				<div className="col-sm-8 px-3 py-3 file-content">
