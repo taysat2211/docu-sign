@@ -7,6 +7,7 @@ import Signup from './modules/signup/Signup'
 import  Home from './modules/Home/Home'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Detail from "./modules/file-detail/Detail";
+import Notice from './modules/Notice/Notice';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" component={Signup}/>
           <Route path="/file/detail/1" component={Detail}/>
           <Route path="/home" component={Home}/>
+          <Route path="/signup-notification" component={Notice}/>
         </Switch>
       </Router>
     </>
