@@ -17,11 +17,11 @@ services:
   - docker
 
 before_install:
-  - docker build -t haibui/docu-sign ./docu-sign
+  - docker build -t thanhdatus16/docu-sign ./docu-sign
 
 after_success:
-  - docker build -t haibui/docu-sign ./docu-sign
+  - docker build -t thanhdatus16/docu-sign ./docu-sign
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push haibui/docu-sign
+  - docker push thanhdatus16/docu-sign
