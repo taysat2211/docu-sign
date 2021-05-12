@@ -1,11 +1,4 @@
 sudo: required
-# specify language
-language: node_js
-
-# specify language options
-node_js:
-  - '12.4'
-  - '14.9'
 
 # configure which branches to run
 branches:
