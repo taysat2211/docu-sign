@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../login/Login.css';
-import Notification from '../../components/Notification'
-import ErrorNotification from '../../components/ErrorNotification'
+import Notification from '../../components/Notification';
+import ErrorNotification from '../../components/ErrorNotification';
+import Menu from '../../components/Menu';
 
 export default function Notice(props) {
     const signupStatus = localStorage.getItem('success-signup');
@@ -10,7 +11,8 @@ export default function Notice(props) {
     const userEmail = localStorage.getItem('user-email');
 
     return (
-        <div style={{textAlign:"left"}}>
+        <div className="background-authen" style={{textAlign:"left"}}>
+            <Menu/>
             <Container className="login-container"  style={{paddingBottom: "200px", marginLeft: "157px"}}>
                 <Row xs={1} md={2}>
                     <Col className="login-form">

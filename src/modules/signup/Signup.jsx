@@ -8,6 +8,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import '../login/Login.css';
 import { signup } from '../../axios/users/Signup';
+import Menu from '../../components/Menu';
 
 export default function Signup() {
     const [email, setEmail] = useState('');
@@ -96,7 +97,7 @@ export default function Signup() {
 
     return (
         <div className="background-authen" style={{textAlign:"left"}}>
-            
+            <Menu />
             <Container className="login-container"  style={{paddingBottom: "200px", marginLeft: "157px"}}>
                 <Row xs={1} md={2} className="justify-content-md-between">
                     <Col>
