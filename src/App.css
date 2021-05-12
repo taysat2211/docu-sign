@@ -2,9 +2,13 @@
   text-align: center;
 }
 
-#root{
+#root {
   width: 100%;
   min-height: 100%;
   background-image: none;
-	font-family: 'Be Vietnam', sans-serif;
+  font-family: 'Be Vietnam', sans-serif;
+}
+
+.nostyle {
+  padding: 0;
 }
