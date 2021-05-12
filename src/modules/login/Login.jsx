@@ -8,7 +8,7 @@ import './Login.css';
 import Swal from 'sweetalert2';
 import { LoginService } from '../../axios/authorization/LoginService';
 import Menu from '../../components/Menu';
-
+import { useHistory } from 'react-router-dom';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -18,6 +18,8 @@ export default function Login() {
     });
     
     const [alert, setAlert] = useState(false);
+
+    const history = useHistory();
 
     function handleClickShowPassword () {
         setPassword({ ...password, showPassword: !password.showPassword });
@@ -41,14 +43,8 @@ export default function Login() {
         }
 
         if (await isAuthenticated()) {
-            return Swal.fire({
-                title: 'Thành công',
-                text: 'Đăng nhập thành công',
-                icon: 'success',
-                confirmButtonText: 'Cool'
-            });
+            history.push('/home')
         } else {
-        
             return Swal.fire({
                 title: 'Thất bại',
                 text: 'Tên đăng nhập hoặc mật khẩu sai',

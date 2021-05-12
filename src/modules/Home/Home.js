@@ -143,7 +143,7 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
@@ -181,7 +181,7 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
@@ -219,7 +219,7 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
@@ -257,7 +257,7 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
@@ -295,7 +295,7 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
@@ -333,13 +333,13 @@ const Home = () => {
         <td>		
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>
 				</div>
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-ellipsis-h marg"></i>
 						Khác
 					</a>
@@ -371,7 +371,7 @@ const Home = () => {
         <td>			
 		<div class="row">
 				<div className="col-sm-1 but_td">
-					<a name="" id="" class="btn btn-primary" href="#" role="button">
+					<a name="" id="" class="btn btn-primary" href="/file/detail/1" role="button">
 						<i class="fas fa-edit marg"></i>
 						Xem
 					</a>

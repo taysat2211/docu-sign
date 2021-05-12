@@ -51,7 +51,7 @@
     height: 25px;
   }
   
-  .react-pdf__Page__canvas{
+  table .react-pdf__Page__canvas{
     width: 100px !important;
     height: auto !important;
 

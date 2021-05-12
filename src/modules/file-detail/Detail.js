@@ -3,6 +3,7 @@ import '../file-detail/Details.css';
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel'
+import './Details.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Detail = () => {
@@ -60,7 +61,7 @@ const Detail = () => {
 							file="/assets/docs/file-sample.pdf"
 						/>
 					</div>
-					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}style={{with: "100%"}}>
+					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}>
 						<Page pageNumber={pageNumber} />
 					</Document>
 					<p>
