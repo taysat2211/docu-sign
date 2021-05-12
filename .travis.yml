@@ -4,8 +4,8 @@ language: node_js
 
 # specify language options
 node_js:
-  - '0.10'
-  - '0.11'
+  - '12.4'
+  - '14.9'
 
 # configure which branches to run
 branches:
@@ -17,10 +17,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t thanhdatus16/docu-sign ./docu-sign
+  - docker build -t thanhdatus16/docu-sign .
 
 after_success:
-  - docker build -t thanhdatus16/docu-sign ./docu-sign
+  - docker build -t thanhdatus16/docu-sign .
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
