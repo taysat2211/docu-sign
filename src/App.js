@@ -1,14 +1,14 @@
 import React from "react";
 import './App.css';
 // import Menu from "./components/Menu";
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import Login from './modules/login/Login'
 import Signup from './modules/signup/Signup'
 import  Home from './modules/Home/Home'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Detail from "./modules/file-detail/Detail";
 import Notice from './modules/Notice/Notice';
-
+import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
     <>
@@ -16,8 +16,22 @@ function App() {
         <Switch>
           <Route exact path="/" component={Login} /> 
           <Route path="/signup" component={Signup}/>
-          <Route path="/file/detail/1" component={Detail}/>
-          <Route path="/home" component={Home}/>
+          <Route path="/home" render={props => 
+            localStorage.getItem('access_token') !== null
+            ? (
+              <Home {...props} />
+            ) : (
+              <Redirect to={{ pathname: "/" }} />
+            )
+          } />
+          <Route path="/file/detail/1" render={props => 
+            localStorage.getItem('access_token') !== null
+            ? (
+              <Detail {...props} />
+            ) : (
+              <Redirect to={{ pathname: "/" }} />
+            )
+          } />
           <Route path="/signup-notification" component={Notice}/>
         </Switch>
       </Router>

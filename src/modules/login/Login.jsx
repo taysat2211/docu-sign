@@ -31,8 +31,9 @@ export default function Login() {
 
     const isAuthenticated = async () => {
         const userInfo = await LoginService(username, password.password);
-        console.log(userInfo);
+        //console.log(userInfo);
         if (userInfo === null) return false;
+        localStorage.setItem('access_token', userInfo.access_token);
         return true;
     }
 
@@ -43,7 +44,8 @@ export default function Login() {
         }
 
         if (await isAuthenticated()) {
-            history.push('/home')
+            
+            history.push('/home');
         } else {
             return Swal.fire({
                 title: 'Thất bại',
