@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import {Form, Button, Container, Row, Col, InputGroup} from 'react-bootstrap'
 import {IconButton} from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
@@ -20,12 +19,10 @@ export default function Signup() {
         confirmPassword: '',
         showConfirmPassword: false
     });
-
     const [user, setUser] = useState({
         username: '', password: '', role: 'user', firstName: 'empty', lastName: 'empty', 
         address: 'empty', phoneNumber: 'empty', email: ''
     });
-
     const [alert, setAlert] = useState(false);
     const [same, setSame] = useState(true);
     const history = useHistory();

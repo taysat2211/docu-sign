@@ -1,6 +1,5 @@
 import React from "react";
 import './App.css';
-// import Menu from "./components/Menu";
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import Login from './modules/login/Login'
 import Signup from './modules/signup/Signup'
@@ -8,7 +7,7 @@ import  Home from './modules/Home/Home'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Detail from "./modules/file-detail/Detail";
 import Notice from './modules/Notice/Notice';
-import PrivateRoute from './components/PrivateRoute';
+
 function App() {
   return (
     <>
