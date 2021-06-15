@@ -6,6 +6,7 @@ import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
+import PDFViewer from 'pdf-viewer-reactjs';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Detail = () => {
