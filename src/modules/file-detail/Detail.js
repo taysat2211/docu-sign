@@ -106,7 +106,8 @@ const Detail = () => {
 							file="/assets/docs/file-sample.pdf"
 						/>
 					</div>
-					<Document file="https://drive.google.com/file/d/1vnoyyphAyXeoqOVoRxc_XH4p-49EX134/view?usp=drivesdk" onLoadSuccess={onDocumentLoadSuccess}>
+					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+						<Page pageNumber={pageNumber} />
 					</Document>
 					<p>
 						Page {pageNumber} of {numPages}
