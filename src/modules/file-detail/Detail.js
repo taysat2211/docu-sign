@@ -15,8 +15,10 @@ const Detail = () => {
 	const [ isSignatureModalShow, setIsSignatureModalShow ] = useState(false);
 	const [ isSendFileModalShow, setIsSendFileModalShow ] = useState(false);
 
-	const [ partnerEmail, setPartnerEmail ] = useState(null);
-	const [ docTitle, setDocTitle ] = useState(null);
+	const [pos,setPos] = useState({x: 0, y : 0});
+	const [draging,setDraging] = useState(false);
+
+	const partnerInfo = useRef({});
 
 	const [ user, setUser ] = useState({
 		name: 'Nguyễn Ngọc Hiển',
@@ -50,6 +52,19 @@ const Detail = () => {
 	const showInfoModal = () => {
 		setIsSignatureModalShow(true);
 	};
+	const onDragStart = (e,v) =>{
+		setPos({x: e.screenX - e.currentTarget.getBoundingClientRect().left, y: e.screenY - e.currentTarget.getBoundingClientRect().top})
+		setDraging(true);
+	}
+	const onDrop = (e) =>{
+		return(
+			<Image src={e.dataTransfer.getData("text/plain")} />
+		);
+	}
+
+	const allowDrop = (e) => {
+		e.preventDefault();
+	}
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
@@ -86,8 +101,16 @@ const Detail = () => {
 							onClick={() => {
 								showInfoModal();
 							}}
+							draggable="true"
+							onMouseDown={e=>{
+								onDragStart(e);
+							}}
+							// onMouseMove={e=>{
+							// 	onDraging(e)
+							// }}
+							
 						>
-							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
+							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }}/>
 							Thêm chữ ký
 						</Button>
 						<div className="list-group-item list-group-item-action">
@@ -96,21 +119,18 @@ const Detail = () => {
 						</div>
 					</div>
 				</div>
-				<div className="col-sm-8 px-3 py-3 file-content">
+				<div className="col-sm-8 px-3 py-3 file-content" onDragOver={(e)=>{ allowDrop(e)}} onDrop={(e)=>onDrop(e)}>
 					<div id="fileControll">
 						<ControlPanel
 							numPages={numPages}
 							pageNumber={pageNumber}
 							setPageNumber={setPageNumber}
-							file="/assets/docs/file-sample.pdf"
+							file="https://cdn2.hubspot.net/hub/453343/file-2434679007-pdf/pdf/speech.pdf"
 						/>
 					</div>
-					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+					<Document file="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/view?fbclid=IwAR06mBP9lULfE_PlhPNhGV1xRj_85srS0hNC0I0dKWAEqrUD5fZgnxSyLoE" onLoadSuccess={onDocumentLoadSuccess} >
 						<Page pageNumber={pageNumber} />
 					</Document>
-					<p>
-						Page {pageNumber} of {numPages}
-					</p>
 				</div>
 				<div className="col-sm-2 bg-gray">Lịch sử thay đổi</div>
 			</div>
