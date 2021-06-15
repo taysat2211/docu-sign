@@ -4,6 +4,7 @@ import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel'
 import './Details.css';
+import PDFViewer from 'pdf-viewer-reactjs';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Detail = () => {
@@ -61,8 +62,7 @@ const Detail = () => {
 							file="/assets/docs/file-sample.pdf"
 						/>
 					</div>
-					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-						<Page pageNumber={pageNumber} />
+					<Document file="https://drive.google.com/file/d/1vnoyyphAyXeoqOVoRxc_XH4p-49EX134/view?usp=drivesdk" onLoadSuccess={onDocumentLoadSuccess}>
 					</Document>
 					<p>
 						Page {pageNumber} of {numPages}
