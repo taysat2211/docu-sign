@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../file-detail/Details.css';
+import { Button, Modal, Image } from 'react-bootstrap';
+import SignaturePad from 'react-signature-canvas';
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
-import ControlPanel from '../../components/ControlPanel'
+import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
 import PDFViewer from 'pdf-viewer-reactjs';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -11,8 +13,44 @@ const Detail = () => {
 	const [ numPages, setNumPages ] = useState(null);
 	const [ pageNumber, setPageNumber ] = useState(1);
 
+	const [ isSignatureModalShow, setIsSignatureModalShow ] = useState(false);
+	const [ isSendFileModalShow, setIsSendFileModalShow ] = useState(false);
+
 	const [ partnerEmail, setPartnerEmail ] = useState(null);
 	const [ docTitle, setDocTitle ] = useState(null);
+
+	const [ user, setUser ] = useState({
+		name: 'Nguyễn Ngọc Hiển',
+		email: 'ngochien123@gmail.com',
+		phone: 'xxxxxx123',
+		avatar: '/img_avatar.png',
+		sign: ''
+	});
+
+	let signPad = useRef({});
+
+	const clearSign = () => {
+		signPad.current.clear();
+	};
+
+	const saveSign = () => {
+		let data = signPad.current.toDataURL();
+		setUser({ ...user, sign: data });
+		console.log(user.sign);
+	};
+
+	const showSign = () => {
+		signPad.current.fromDataURL(user.sign);
+	};
+
+	const hideModel = () => {
+		setIsSendFileModalShow(false);
+		setIsSignatureModalShow(false);
+	};
+
+	const showInfoModal = () => {
+		setIsSignatureModalShow(true);
+	};
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
@@ -29,24 +67,30 @@ const Detail = () => {
 				</div>
 				<div className="col-sm-10 d-flex justify-content-between align-items-center px-5">
 					<p>Hợp đồng lao động.pdf</p>
-					<button
+					<Button
 						type="button"
 						className="btn btn-primary"
-						data-bs-toggle="modal"
-						data-bs-target="#sendRequest"
+						onClick={() => {
+							setIsSendFileModalShow(true);
+						}}
 					>
 						<i class="fas fa-paper-plane" /> Gởi yêu cầu ký hợp đồng
-					</button>
+					</Button>
 				</div>
 			</div>
 			<div className="row">
 				<div className="col-sm-2 bg-gray">
 					<p>Tác vụ</p>
 					<div class="list-group">
-						<div className="list-group-item list-group-item-action">
+						<Button
+							className="list-group-item list-group-item-action"
+							onClick={() => {
+								showInfoModal();
+							}}
+						>
 							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
 							Thêm chữ ký
-						</div>
+						</Button>
 						<div className="list-group-item list-group-item-action">
 							<i className="fas fa-stamp" style={{ marginRight: '1em' }} />
 							Thêm dấu mộc
@@ -70,67 +114,107 @@ const Detail = () => {
 				</div>
 				<div className="col-sm-2 bg-gray">Lịch sử thay đổi</div>
 			</div>
-			<div
-				className="modal fade"
-				id="sendRequest"
-				data-bs-backdrop="static"
-				data-bs-keyboard="false"
-				tabindex="-1"
-				aria-labelledby="staticBackdropLabel"
-				aria-hidden="true"
+
+			<Modal
+				show={isSignatureModalShow}
+				onHide={() => {
+					hideModel();
+				}}
+				animation={false}
+				centered
 			>
-				<div className="modal-dialog modal-dialog-centered">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h5 className="modal-title" id="staticBackdropLabel">
-								Gởi yêu cầu ký hợp đồng
-							</h5>
-							<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-						</div>
-						<div className="modal-body">
-							<form>
-								<div className="mb-3">
-									<label for="exampleInputEmail1" className="form-label">
-										Tiêu đề văn bản
-									</label>
-									<input
-										type="text"
-										className="form-control"
-										id="documentTitle"
-										required={true}
-										placeholder="Nhập tiêu đề"
-									/>
-								</div>
-								<div className="mb-3">
-									<label for="email" className="form-label">
-										Email
-									</label>
-									<input
-										type="email"
-										class="form-control"
-										id="email"
-										required={true}
-										placeholder="Nhập email người ký"
-									/>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button
-								type="button"
-								class="btn btn-primary"
-								onClick={(documentTitle, email) => {
-									this.setPartnerEmail(email);
-									this.setDocTitle(documentTitle);
-									console.log(this.docTitle + ' ' + this.partnerEmail);
-								}}
-							>
-								Gởi yêu cầu
-							</button>
+				<Modal.Header closeButton>
+					<Modal.Title style={{ margin: 'auto' }}>Thông tin người ký</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<div className="d-flex flex-row">
+						<Image src={user.avatar} roundedCircle style={{ width: '15vh', height: '15vh' }} />
+						<div className="info">
+							<h3>{user.name}</h3>
+							<p>
+								<i className="fas fa-envelope" /> {user.email}
+							</p>
+							<p>
+								<i className="fas fa-phone-volume" /> {user.phone}
+							</p>
 						</div>
 					</div>
-				</div>
-			</div>
+					<div className="signature">
+						<p>Chữ ký</p>
+						<div className="signatureArea">
+							<SignaturePad ref={signPad} canvasProps={{ className: 'sign' }} />
+						</div>
+					</div>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="secondary"
+						onClick={() => {
+							clearSign();
+						}}
+					>
+						Clear Signature
+					</Button>
+					<Button
+						variant="primary"
+						onClick={() => {
+							saveSign();
+						}}
+					>
+						Save Changes
+					</Button>
+					<Button
+						variant="primary"
+						onClick={() => {
+							showSign();
+						}}
+					>
+						Show Signature
+					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			<Modal show={isSendFileModalShow} onHide={() => hideModel()} animation={false} centered>
+				<Modal.Header closeButton>
+					<Modal.Title>Gởi yêu cầu ký hợp đồng</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<form>
+						<div className="mb-3">
+							<label for="exampleInputEmail1" className="form-label">
+								Tiêu đề văn bản
+							</label>
+							<input
+								type="text"
+								className="form-control"
+								id="documentTitle"
+								required={true}
+								placeholder="Nhập tiêu đề"
+							/>
+						</div>
+						<div className="mb-3">
+							<label for="email" className="form-label">
+								Email
+							</label>
+							<input
+								type="email"
+								class="form-control"
+								id="email"
+								required={true}
+								placeholder="Nhập email người ký"
+							/>
+						</div>
+					</form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={() => hideModel()}>
+						Close
+					</Button>
+					<Button variant="primary" onClick={() => hideModel()}>
+						Send
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</div>
 	);
 };
