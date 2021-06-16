@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ControlPanel = (props) => {
-    const { file, pageNumber, numPages, setPageNumber, scale, setScale } = props;
+    const { file, pageNumber, numPages, setPageNumber } = props;
   
     const isFirstPage = pageNumber === 1;
     const isLastPage = pageNumber === numPages;
@@ -25,20 +25,6 @@ const ControlPanel = (props) => {
     const onPageChange = (e) => {
       const { value } = e.target;
       setPageNumber(Number(value));
-    };
-  
-    const isMinZoom = scale < 0.6;
-    const isMaxZoom = scale >= 2.0;
-  
-    const zoomOutClass = isMinZoom ? 'disabled' : 'clickable';
-    const zoomInClass = isMaxZoom ? 'disabled' : 'clickable';
-  
-    const zoomOut = () => {
-      if (!isMinZoom) setScale(scale - 0.1);
-    };
-  
-    const zoomIn = () => {
-      if (!isMaxZoom) setScale(scale + 0.1);
     };
   
     return (

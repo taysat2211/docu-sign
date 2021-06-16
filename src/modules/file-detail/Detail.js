@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../file-detail/Details.css';
 import { Button, Modal, Image } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import SignaturePad from 'react-signature-canvas';
+import Signature from '../../components/Signature';
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
 import Draggable from 'react-draggable';
+import {getContract} from '../../axios/contract';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -17,8 +20,11 @@ const Detail = () => {
 	const [ isSignatureModalShow, setIsSignatureModalShow ] = useState(false);
 	const [ isSendFileModalShow, setIsSendFileModalShow ] = useState(false);
 
-	const [ partnerEmail, setPartnerEmail ] = useState(null);
-	const [ docTitle, setDocTitle ] = useState(null);
+	const [pos,setPos] = useState({x: 0, y : 0});
+
+	const [fileInfo, setFileInfo] = useState({});
+
+	const partnerInfo = useRef({});
 
 	const [ user, setUser ] = useState({
 		name: 'Nguyễn Ngọc Hiển',
@@ -31,6 +37,8 @@ const Detail = () => {
 	const [ showSignature, setShow ] = useState(false);
 
 	const signPad = useRef({});
+	let contractId = useParams();
+
 
 	const clearSign = () => {
 		signPad.current.clear();
@@ -61,16 +69,35 @@ const Detail = () => {
 	const showInfoModal = () => {
 		setIsSignatureModalShow(true);
 	};
+	const onDragStart = (e) =>{
+		setPos({x: e.screenX - e.currentTarget.getBoundingClientRect().left, y: e.screenY - e.currentTarget.getBoundingClientRect().top});
+		
+	}
+	const onDrop = (e) =>{
+		
+	}
+
+	const allowDrop = (e) => {
+		e.preventDefault();
+	}
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
 	}
 
+	useEffect(async()=>{
+		
+		 let data = await getContract(contractId.id);
+
+		 setFileInfo(data.data.data);
+		 
+	},[])
+
 	return (
 		<div className="container-fluid">
 			<div className="row bg-gray" style={{ height: '50px' }}>
 				<div className="col-sm-2 border-end d-flex align-items-center">
-					<a href="/storage" className="align-middle back-space">
+					<a href="/home" className="align-middle back-space">
 						<i class="fas fa-arrow-left" />
 						<span style={{ marginLeft: '10px' }}>Quay lại</span>
 					</a>
@@ -97,8 +124,16 @@ const Detail = () => {
 							onClick={() => {
 								showInfoModal();
 							}}
+							draggable="true"
+							onMouseDown={e=>{
+								onDragStart(e);
+							}}
+							// onMouseMove={e=>{
+							// 	onDraging(e)
+							// }}
+							
 						>
-							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
+							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }}/>
 							Thêm chữ ký
 						</Button>
 						<div className="list-group-item list-group-item-action">
@@ -113,7 +148,7 @@ const Detail = () => {
 							numPages={numPages}
 							pageNumber={pageNumber}
 							setPageNumber={setPageNumber}
-							file="/assets/docs/file-sample.pdf"
+							// file={fileInfo.publicLink}
 						/>
 					</div>
 							
@@ -121,10 +156,11 @@ const Detail = () => {
 					{/* <embed src="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/preview" width="800" height="500"/> */}
 					<Document file='/example.pdf'
 						onLoadSuccess={onDocumentLoadSuccess}>
-						<Page pageNumber={pageNumber} />
-						{showSignature === true ? <Draggable><img src={user.sign} alt="Signature" /></Draggable>:null}	
+							<Page pageNumber={pageNumber} />
+							{showSignature === true ? <Draggable><img src={user.sign} alt="Signature" /></Draggable>:null}	
 
 					</Document>
+						
 
 					<p>
 						Page {pageNumber} of {numPages}
