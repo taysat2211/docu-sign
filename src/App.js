@@ -23,7 +23,7 @@ function App() {
               <Redirect to={{ pathname: "/" }} />
             )
           } />
-          <Route path="/file/detail/1" render={props => 
+          <Route path="/file/detail/:id" render={props => 
             localStorage.getItem('access_token') !== null
             ? (
               <Detail {...props} />

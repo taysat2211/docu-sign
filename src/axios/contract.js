@@ -29,6 +29,26 @@ export const createStore = async () => {
     return response;
 }
 
+export const getAllContracts = async () => {
+    const response = await axios.get(`${config.backendBaseURL}/google_storage/contracts`,
+    {
+        headers: {
+            'authorization': `Bear ${access_token}`
+        }
+    });
+    return response;
+}
+
+export const getContract = async (contractId) => {
+    const response = await axios.get(`${config.backendBaseURL}/google_storage/contracts/single_contract?contractId=${contractId}`,
+    {
+        headers: {
+            'authorization': `Bear ${access_token}`
+        }
+    });
+    return response;
+}
+
 
 
 
