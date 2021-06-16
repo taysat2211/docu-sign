@@ -6,7 +6,7 @@ import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
-import PDFViewer from 'pdf-viewer-reactjs';
+import {getSingleContract} from '../../axios/contract';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Detail = () => {
@@ -106,7 +106,9 @@ const Detail = () => {
 							file="/assets/docs/file-sample.pdf"
 						/>
 					</div>
-					<Document file="/example.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+					{/* <embed src="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/preview" width="800" height="500"/> */}
+					<Document file={localStorage.getItem('contractPublicLink')}
+						onLoadSuccess={onDocumentLoadSuccess}>
 						<Page pageNumber={pageNumber} />
 					</Document>
 					<p>

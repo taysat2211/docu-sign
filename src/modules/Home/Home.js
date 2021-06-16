@@ -3,10 +3,15 @@ import './Home.css';
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import {uploadContract, createStore, } from '../../axios/contract';
+import { useContext } from 'react';
+import AppContext from '../../components/appContext';
+import { useHistory } from 'react-router';
+import {getSingleContract} from '../../axios/contract';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Home = () => {
+	const history = useHistory();
 
 	const [ numPages, setNumPages ] = useState(null);
 
@@ -21,6 +26,8 @@ const Home = () => {
 	const formData = new FormData();
     formData.append('contract', null);
 
+	const { previewLink, setLink, fileId, setFileId } = useContext(AppContext);
+
 	function showModal(){
 		setModalEnable(!modalEnable);
 	}
@@ -31,9 +38,24 @@ const Home = () => {
 
 
 	const onChangeHandler = async (event) => {
-		console.log(event.target.files[0]);
+		//console.log(event.target.files[0]);
 		formData.set('contract', event.target.files[0]);
 		const response = await uploadContract(formData);
+		//console.log(response.data.data);
+		
+		if (response.data.data) {
+			const uploadedContract = response.data.data;
+			localStorage.setItem('fileId', uploadedContract.id)
+			// setFileId(response.data.data.id);
+			// setLink('gg link updated');
+			// console.log(fileId);
+			// console.log(previewLink);
+			const contractId = localStorage.getItem('fileId');
+			const res = await getSingleContract(contractId);
+			//console.log(res);
+			const getContractPublicLink = localStorage.setItem('contractPublicLink', res.data.data.publicLink)
+			history.push('/file/detail/' + uploadedContract.id);
+		}
 		//console.log(response);
 	}
 
