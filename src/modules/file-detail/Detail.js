@@ -6,7 +6,8 @@ import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
-import {getSingleContract} from '../../axios/contract';
+import Draggable from 'react-draggable';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Detail = () => {
@@ -27,20 +28,29 @@ const Detail = () => {
 		sign: ''
 	});
 
-	let signPad = useRef({});
+	const [ showSignature, setShow ] = useState(false);
+
+	const signPad = useRef({});
 
 	const clearSign = () => {
 		signPad.current.clear();
 	};
 
 	const saveSign = () => {
-		let data = signPad.current.toDataURL();
+		const data = signPad.current.toDataURL();
+		//console.log(data);
 		setUser({ ...user, sign: data });
-		console.log(user.sign);
+		//saveSign();
+		//console.log(user);
+		//console.log(user);
+
 	};
 
 	const showSign = () => {
-		signPad.current.fromDataURL(user.sign);
+		//signPad.current.fromDataURL(user.sign);
+		//console.log(user.sign)
+		setShow(true);
+		hideModel();
 	};
 
 	const hideModel = () => {
@@ -106,11 +116,16 @@ const Detail = () => {
 							file="/assets/docs/file-sample.pdf"
 						/>
 					</div>
+							
+					
 					{/* <embed src="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/preview" width="800" height="500"/> */}
-					<Document file={localStorage.getItem('contractPublicLink')}
+					<Document file='/example.pdf'
 						onLoadSuccess={onDocumentLoadSuccess}>
 						<Page pageNumber={pageNumber} />
+						{showSignature === true ? <Draggable><img src={user.sign} alt="Signature" /></Draggable>:null}	
+
 					</Document>
+
 					<p>
 						Page {pageNumber} of {numPages}
 					</p>
@@ -145,7 +160,7 @@ const Detail = () => {
 					<div className="signature">
 						<p>Chữ ký</p>
 						<div className="signatureArea">
-							<SignaturePad ref={signPad} canvasProps={{ className: 'sign' }} />
+							<SignaturePad ref={signPad} />
 						</div>
 					</div>
 				</Modal.Body>
