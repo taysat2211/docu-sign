@@ -9,7 +9,7 @@ import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
 import Draggable from 'react-draggable';
-import {getContract} from '../../axios/contract';
+import { getContract} from '../../axios/contract';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -20,9 +20,9 @@ const Detail = () => {
 	const [ isSignatureModalShow, setIsSignatureModalShow ] = useState(false);
 	const [ isSendFileModalShow, setIsSendFileModalShow ] = useState(false);
 
-	const [pos,setPos] = useState({x: 0, y : 0});
+	const [ pos, setPos ] = useState({ x: 0, y: 0 });
 
-	const [fileInfo, setFileInfo] = useState({});
+	const [ fileInfo, setFileInfo ] = useState({});
 
 	const partnerInfo = useRef({});
 
@@ -37,8 +37,7 @@ const Detail = () => {
 	const [ showSignature, setShow ] = useState(false);
 
 	const signPad = useRef({});
-	let contractId = useParams();
-
+	const { contractId } = useParams();
 
 	const clearSign = () => {
 		signPad.current.clear();
@@ -51,7 +50,6 @@ const Detail = () => {
 		//saveSign();
 		//console.log(user);
 		//console.log(user);
-
 	};
 
 	const showSign = () => {
@@ -69,29 +67,31 @@ const Detail = () => {
 	const showInfoModal = () => {
 		setIsSignatureModalShow(true);
 	};
-	const onDragStart = (e) =>{
-		setPos({x: e.screenX - e.currentTarget.getBoundingClientRect().left, y: e.screenY - e.currentTarget.getBoundingClientRect().top});
-		
-	}
-	const onDrop = (e) =>{
-		
-	}
+	const onDragStart = (e) => {
+		setPos({
+			x: e.screenX - e.currentTarget.getBoundingClientRect().left,
+			y: e.screenY - e.currentTarget.getBoundingClientRect().top
+		});
+	};
+	const onDrop = (e) => {};
 
 	const allowDrop = (e) => {
 		e.preventDefault();
-	}
+	};
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
 	}
 
-	useEffect(async()=>{
-		
-		 let data = await getContract(contractId.id);
-
-		 setFileInfo(data.data.data);
-		 
-	},[])
+	useEffect(() => {
+		async function fetchData() {
+			var data = await getContract(contractId);
+			setFileInfo(data.data.data);
+			// console.log(data.data.data.download);
+			// downloadFile(data.data.data.download);
+		}
+		fetchData();
+	}, [contractId]);
 
 	return (
 		<div className="container-fluid">
@@ -125,15 +125,14 @@ const Detail = () => {
 								showInfoModal();
 							}}
 							draggable="true"
-							onMouseDown={e=>{
+							onMouseDown={(e) => {
 								onDragStart(e);
 							}}
 							// onMouseMove={e=>{
 							// 	onDraging(e)
 							// }}
-							
 						>
-							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }}/>
+							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
 							Thêm chữ ký
 						</Button>
 						<div className="list-group-item list-group-item-action">
@@ -151,16 +150,16 @@ const Detail = () => {
 							// file={fileInfo.publicLink}
 						/>
 					</div>
-							
-					
-					{/* <embed src="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/preview" width="800" height="500"/> */}
-					<Document file='/example.pdf'
-						onLoadSuccess={onDocumentLoadSuccess}>
-							<Page pageNumber={pageNumber} />
-							{showSignature === true ? <Draggable><img src={user.sign} alt="Signature" /></Draggable>:null}	
 
+					{/* <embed src="https://drive.google.com/file/d/1XXOovw8h96zCIpZrkV3-9eGLwK6uzUWo/preview" width="800" height="500"/> */}
+					<Document file={`https://cors-anywhere.herokuapp.com/${fileInfo.download}`} onLoadSuccess={onDocumentLoadSuccess}>
+						<Page pageNumber={pageNumber} />
+						{showSignature === true ? (
+							<Draggable>
+								<img src={user.sign} alt="Signature" />
+							</Draggable>
+						) : null}
 					</Document>
-						
 
 					<p>
 						Page {pageNumber} of {numPages}

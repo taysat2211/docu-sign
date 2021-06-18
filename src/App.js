@@ -31,7 +31,7 @@ function App() {
                 <Redirect to={{ pathname: "/" }} />
               )
             }/>
-            <Route path="/file/detail" render={props => 
+            <Route path="/file/detail/:contractId" render={props => 
               localStorage.getItem('access_token') !== null
               ? (
                 <AppContext.Provider value={{ previewLink, setLink, fileId, setFileId }}>
