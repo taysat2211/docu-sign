@@ -8,7 +8,9 @@ import {uploadContract, createStore, } from '../../axios/contract';
 import { useContext } from 'react';
 import AppContext from '../../components/appContext';
 import { useHistory } from 'react-router';
-import {getSingleContract,getAllContracts} from '../../axios/contract';
+import { getSingleContract, getContracts } from '../../axios/contract';
+import EmptyFileList from  '../../components/emptyFileList/EmptyFilesList';
+import prettyBytes from 'pretty-bytes';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -19,9 +21,65 @@ const Home = () => {
 
 	const [ modalEnable, setModalEnable ] = useState(false);
 
-	const [ listFile, setListFile ] = useState([]);
+	const [ listFile, setListFile ] = useState({contracts: []});
 
 	const [ contract, setContract ] = useState({});
+
+	const [ filter, setFilter] = useState({type: 'receiver'});
+
+	const [filterButtons, setFilterButtons] = useState([
+		{
+			id: 1,
+			name: "Tất cả",
+			className: "col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button"
+		},
+		{
+			id: 2,
+			name: "Đang xử lý",
+			className: "col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button"
+		},
+		{
+			id: 3,
+			name: "Hoàn tất",
+			className: "col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button"
+		},
+		{
+			id: 4,
+			name: "Thất bại",
+			className: "col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button"
+		}
+	]);
+
+	const [categories, setCategories] = useState([
+		{
+			id: 1,
+			name: "Đã nhận",
+			icon: "fas fa-file-alt",
+			className: "list-group-item list-group-item-action d-flex justify-content-between d-flex justify-content-between align-items-center"
+		},
+		{
+			id: 2,
+			name: "Đã gửi đi",
+			icon: "fas fa-folder-minus",
+			className: "list-group-item list-group-item-action d-flex justify-content-between d-flex justify-content-between align-items-center"
+		},
+		{
+			id: 3,
+			name: "Bản nháp",
+			icon: "fas fa-pencil-ruler",
+			className: "list-group-item list-group-item-action d-flex justify-content-between d-flex justify-content-between align-items-center"
+		},
+		{
+			id: 4,
+			name: "Đã xóa",
+			icon: "fas fa-trash",
+			className: "list-group-item list-group-item-action d-flex justify-content-between d-flex justify-content-between align-items-center"
+		}
+	]);
+
+	const [activeButton, setActiveButton] = useState(1);
+
+	const [activeCategory, setActiveCategory] = useState(1);
 
 	const fileUpload = createRef();
 
@@ -65,15 +123,69 @@ const Home = () => {
 		fileUpload.current.click();
 	};
 
+	const onFilterButtonClickHandler = (id) => {
+		setActiveButton(id);
+		switch (id) {
+			case 1:
+				const cloneFilter = filter;
+				if (cloneFilter.status) delete cloneFilter.status;
+				setFilter(cloneFilter);
+				break;
+			case 2:
+				break;
+			case 3:
+				setFilter({...filter, status: 'unsigned'});
+				break;
+			case 3:
+				break;
+			default:
+				break;
+		}
+		console.log(filter);
+	}
+
+	const onCategoryClickHandler = async (id) => {
+		setActiveCategory(id);
+		setActiveButton(1);
+		let cloneFilter;
+		switch (id) {
+			case 1:
+				cloneFilter = {...filter, type: 'receiver'};
+				break;
+			case 2:
+				cloneFilter = {...filter, type: 'sender'};
+				break;
+			case 3:
+				cloneFilter = null;
+				break;
+			default:
+				break;
+		}
+		setFilter(cloneFilter);
+		
+		// const contracts = await getContracts(filter); 
+		// console.log(contracts);
+		// if (contracts.data.data !== null) setListFile(contracts.data.data);
+	}
+
 	useEffect(async () => {
-		let data = await getAllContracts();
-		setListFile(data.data.data);
+		const data = await getContracts(filter);
+		console.log(data.data.data);
+		if (data.data.data !== null) setListFile(data.data.data);
+		// console.log(listFile);
 	}, []);
+
+	useEffect(async () => {
+		const contracts = await getContracts(filter); 
+		console.log(contracts);
+		if (contracts.data.data !== null) setListFile(contracts.data.data);
+		// console.log(filter);
+	}, [filter]);
 
 	return (
 		<div className="container-fluid">
 			<div className="row">
-				<div className="col-sm-2 bg-cl dash_height" style={{ paddingTop: '20px' }}>
+				<div className="col-sm-2 bg-cl dash_height" style={{ paddingTop: '20px'}}>
 					<p id="bestsign_01">BestSign</p>
 
 					<a id="upload_01" class="btn btn-primary" role="button" onClick={onClickHandler}>
@@ -88,37 +200,24 @@ const Home = () => {
 						// multiple={false}
 					/>
 					<i id="listcontractcustom" class="fas fa-h3">
-						{' '}
 						Danh mục hợp đồng
 					</i>
 
-					<div class="list-group bg-cl fluit" style={{ marginBottom: '20px' }}>
-						<a
-							href="#"
-							className="list-group-item list-group-item-action d-flex justify-content-between d-flex justify-content-between align-items-center"
-							aria-current="false"
-						>
-							<div class="flex-grow-1 bd-highlight">
-								<i class="fas fa-file-alt" style={{ marginRight: '1em' }} />
-								Đã nhận
-							</div>
-							<span class="badge bg-primary rounded-pill">14</span>
-						</a>
-						<a href="#" className="list-group-item list-group-item-action">
-							<i className="fas fa-folder-minus" style={{ marginRight: '1em' }} />
-							Đã gửi đi
-						</a>
-						<a href="#" className="list-group-item list-group-item-action">
-							<i className="fas fa-pencil-ruler" style={{ marginRight: '1em' }} />
-							Bản nháp
-						</a>
-						<a href="#" className="list-group-item list-group-item-action">
-							<i className="fas fa-trash" style={{ marginRight: '1em' }} />
-							Đã xóa
-						</a>
+					<div class="list-group bg-cl fluit" style={{ marginTop: '10px',marginBottom: '20px' }}>
+						{categories.map(category => {
+							return (
+								<a key={category.id} className={category.className + (activeCategory === category.id ? ' active' : '')} onClick={() => onCategoryClickHandler(category.id)}>
+									<div className="flex-grow-1 bd-highlight">
+										<i className={category.icon} style={{ marginRight: '1em' }} />
+										{category.name}
+									</div>
+									<span class="badge bg-primary rounded-pill">14</span>
+								</a>
+							)
+						})}
 					</div>
+
 					<i id="account_custom" class="fas fa-h3">
-						{' '}
 						Tài khoản
 					</i>
 
@@ -161,107 +260,103 @@ const Home = () => {
 
 					<div className="contract-list">
 						<div>
-							<i id="ctr_1" className="fas fa-h1">
-								Hợp đồng đã nhận
-							</i>
+							<p id="ctr_1" className="fas fa-h1">
+								Hợp đồng
+							</p>
 						</div>
-						<div className="row" style={{ marginBottom: '30px' }}>
-							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button">
-								<a name="" id="" className="btn bg-cl" href="#" role="button">
-									Tất cả (20)
-								</a>
-							</div>
-
-							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button">
-								<a name="" id="" class="btn bg-cl" href="#" role="button">
-									Đang xử lý (10)
-								</a>
-							</div>
-
-							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button">
-								<a name="" id="" class="btn" href="#" role="button">
-									Hoàn tất (10)
-								</a>
-							</div>
-
-							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 bg-cl cus_button">
-								<a name="" id="" class="btn" href="#" role="button">
-									Thất bại (2)
-								</a>
-							</div>
-						</div>
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>
-										<div class="row">
-											<div className="col-sm-1">
-												<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+						{ listFile.contracts.length === 0 ? 
+							<EmptyFileList onClickCallback={onClickHandler}/> :
+							<>
+								<div className="row" style={{ marginBottom: '30px' }}>
+									{filterButtons.map(filterButton => {
+										return (
+											<div key={filterButton.id} className={filterButton.className + (filterButton.id === activeButton ? ' active' : '')}>
+												<a className='btn bg-cl' role="button" onClick={() => onFilterButtonClickHandler(filterButton.id)}>
+													{filterButton.name}
+												</a>
 											</div>
-											<div className="col-sm-2">Tất cả</div>
-										</div>
-									</th>
-									<th>Trạng thái</th>
-									<th>Tổng số 10 hợp đồng</th>
-								</tr>
-							</thead>
-							<tbody bg-cl>
-								{listFile.length <= 0 ? (
-									<p>Chưa có file hiển thị</p>
-								) : (
-									listFile.map((item) => {
-										return(
-											<tr>
-											<td>
-												<div className="row">
-													<div className="col-sm-1">
-														<input
-															type="checkbox"
-															id="vehicle1"
-															name="vehicle1"
-															value="Bike"
-														/>
-													</div>
-													<div className="col-sm-3">
-														<div>
-															<Document file="/sample.pdf">
-																<Page pageNumber={1} />
-															</Document>
-														</div>
-													</div>
-													<div className="col-sm-3" style={{marginLeft: "10px"}}>
-														<h6><strong>{item.contractName}</strong></h6>
-														<h6> {item.description} </h6>
-														<h6> From: {item.fromUser} </h6>
-													</div>
-												</div>
-											</td>
-											<td className="signed">{item.status} {item.updatedAt}</td>
-											<td>
+										)
+									})}
+								</div>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
 												<div class="row">
-													<div className="col-sm-1 but_td" style={{ marginRight: '60px' }}>
-														<Button
-															class="btn btn-primary"
-															href={`/file/detail/${item.contractId}`}
-														>
-															<i class="fas fa-edit marg" />
-															Xem
-														</Button>
+													<div className="col-sm-1">
+														<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
 													</div>
-													<div className="col-sm-1 but_td">
-														<a name="" id="" class="btn btn-primary" href="#" role="button">
-															<i class="fas fa-ellipsis-h marg" />
-															Khác
-														</a>
-													</div>
+													<div className="col-sm-2">Tất cả</div>
 												</div>
-											</td>
+											</th>
+											<th>Trạng thái</th>
+											<th>Tổng số 10 hợp đồng</th>
 										</tr>
-										)	
-									})
-								)}
-							</tbody>
-						</table>
+									</thead>
+									<tbody bg-cl>
+												{listFile.contracts.map(item => {
+													return (
+														<tr key={item.contractId}>
+															<td>
+																<div className="row">
+																	<div className="col-sm-1">
+																		<input
+																			type="checkbox"
+																			id="vehicle1"
+																			name="vehicle1"
+																			value="Bike"
+																		/>
+																	</div>
+																	<div className="col-sm-3">
+																		<div>
+																			<Document file="/sample.pdf">
+																				<Page pageNumber={1} />
+																			</Document>
+																		</div>
+																	</div>
+																	<div className="col-sm-7" style={{marginLeft: "10px"}}>
+																		<h6 className='contract-name'>{item.contractName}</h6>
+																		<h6 className='contract-desc'>Kích cỡ: {prettyBytes(+item.size)} </h6>
+																		{activeCategory === 1 ? <h6 className='contract-desc'> Từ: {item.fromUser} </h6> : null}
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div className="row">
+																	<div className='col-sm'>
+																		{item.status === 'signed' ? <h6 className='contract-status-success'>Đã ký hoàn tất</h6> : (item.status === 'unsigned' ? <h6 className='contract-status-pending'>Chờ ký hợp đồng</h6> : <h6 className='contract-status-fail'>Hủy hợp đồng</h6>)}
+																		<h6 className='contract-desc'>{item.updatedAt}</h6>
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div className="row justify-content-end">
+																	<div className="col-sm-3 but_td" style={{ marginRight: '50px', }}>
+																		<Button
+																			class="btn btn-primary contract-action-button"
+																			href={`/file/detail/${item.contractId}`}
+																		>
+																			<i class="fas fa-edit marg" />
+																			Xem HĐ
+																		</Button>
+																	</div>
+																	<div className="col-sm-3 but_td">
+																		<Button class="btn btn-primary contract-action-button">
+																			<i class="fas fa-ellipsis-h marg" />
+																			Khác
+																		</Button>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													)	
+												}
+											)
+										}
+									</tbody>
+								</table>
+							</>
+						}
 					</div>
 				</div>
 			</div>

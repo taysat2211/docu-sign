@@ -29,14 +29,47 @@ export const createStore = async () => {
 	return response;
 };
 
-export const getAllContracts = async () => {
-	const response = await axios.get(`${config.backendBaseURL}/google_storage/contracts`, {
+export const getContracts = async (filter, options) => {
+	if (!options) options = {
+		limit: 10,
+		page: 1
+	}
+	let contracts;
+	if (!filter || filter === {}) {
+		contracts = await axios.get(`${config.backendBaseURL}/google_storage/contracts?limit=` + options.limit + `&page=` + options.page, {
+			headers: {
+				authorization: `Bear ${access_token}`
+			}
+		});
+		console.log(contracts);
+		return contracts;
+	}
+	const { status, type } = filter;
+	if (status && type) {
+		contracts = await axios.get(`${config.backendBaseURL}/google_storage/contracts?status=` + status + `&type=` + type + `&limit=` + options.limit + `&page=` + options.page, {
+			headers: {
+				authorization: `Bear ${access_token}`
+			}
+		});
+		console.log(contracts);
+		return contracts;
+	}
+	if (status) {
+		contracts = await axios.get(`${config.backendBaseURL}/google_storage/contracts?status=` + status + `&limit=` + options.limit + `&page=` + options.page, {
+			headers: {
+				authorization: `Bear ${access_token}`
+			}
+		});
+		console.log(contracts);
+		return contracts;
+	}
+	contracts = await axios.get(`${config.backendBaseURL}/google_storage/contracts?type=` + type + `&limit=` + options.limit + `&page=` + options.page, {
 		headers: {
 			authorization: `Bear ${access_token}`
 		}
 	});
-	console.log(response);
-	return response;
+	console.log(contracts);
+	return contracts;
 };
 
 export const getContract = async (contractId) => {

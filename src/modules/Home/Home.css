@@ -22,7 +22,7 @@
     left: 85px;
     top: 20px;
 
-    font-family: Be Vietnam;
+    
     font-style: normal;
     font-weight: 600;
     font-size: 36px;
@@ -82,7 +82,7 @@
     left: 20px;
     top: 189px;
     margin-top: 30px;
-    font-family: Be Vietnam;
+    
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
@@ -97,8 +97,8 @@
     height: 22px;
     left: 20px;
     top: 189px;
-    margin-top: 30px;
-    font-family: Be Vietnam;
+    margin-bottom: 10px;
+    
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
@@ -108,20 +108,13 @@
 }
 
 #ctr_1{
-    width: 100%;
-    height: 35px;
-    left: 314px;
-    top: 100px;
-
-    font-family: Be Vietnam;
+    
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 24px;
     line-height: 35px;
     color: #201934;
-
     opacity: 0.9;
-
     margin-bottom: 16px;
 }
 
@@ -144,6 +137,12 @@
     color: #FFFFFF;
     font-weight: 700;
 }
+
+    .cus_button.active {
+        background: #4A3CED;
+        color: #FFFFFF;
+        font-weight: 700;
+    }
 
 .mg{
     margin-bottom: 10px;
@@ -172,7 +171,7 @@
     right: 110px;
     top: 10px;
 
-    font-family: Be Vietnam;
+   
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
@@ -209,8 +208,78 @@
     width: 100%;
     padding-top: 20px;
     padding-left: 26px;
+    margin-bottom: 0px;
 }
 
 .custom-button {
     background: #4A3CED;
+}
+
+.contract-desc {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* Text */
+
+    color: #201934;
+
+    opacity: 0.6;
+}
+
+.contract-name {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 23px;
+
+    /* Text */
+
+    color: #201934;
+}
+
+.contract-status-success {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 23px;
+
+    /* Success */
+
+    color: #11954A;
+}
+
+.contract-status-pending {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 23px;
+
+    /* waiting */
+
+    color: #DD7518;
+}
+
+.contract-status-fail {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 23px;
+
+    /* Fail */
+
+    color: #DF0909;
+}
+
+.contract-action-button {
+    width: 133px;
+    height: 46px;
+    /* Brand */
+
+    background: #3626EB;
+    border: 1px solid #3626EB;
+    box-sizing: border-box;
+    border-radius: 6px;
 }
