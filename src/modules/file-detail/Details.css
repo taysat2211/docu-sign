@@ -1,10 +1,30 @@
-.back-space{
-    color: #8A4DC0;
+.bg-color{
+    background-color: #F3F6FF;
 }
 
-.bg-gray{
-    background-color: #EEF1F1;
+.back-ref {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #3626EB;
 }
+
+.MuiDivider-root {
+    background: #675397;
+    opacity: 0.3;
+}
+
+#contract-name {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 29px;
+
+    /* Text */
+
+    color: #201934;
+}
+
 
 .file-content{
     display: flex;
@@ -12,6 +32,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    background-color: white;
 }
 .list-group{
     width: 100% !important;
@@ -28,4 +49,10 @@
 .sign{
     width: 100%;
     height: 100%;
+}
+
+.file-content .react-pdf__Page {
+    width: 900px;
+    border-radius: 10px;
+    border: black 1px solid !important;
 }

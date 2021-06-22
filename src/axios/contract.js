@@ -30,6 +30,7 @@ export const createStore = async () => {
 };
 
 export const getContracts = async (filter, options) => {
+	console.log(access_token);
 	if (!options) options = {
 		limit: 10,
 		page: 1
@@ -101,3 +102,35 @@ export const getSingleContract = async (contractId) => {
 	);
 	return response;
 };
+
+export const signContract = async (contractId) => {
+	const axiosConfig = {
+		headers: {
+			authorization: `Bear ${access_token}`
+		}
+	};
+	const response = await axios.post(
+		`${config.backendBaseURL}/signatures/sign`,
+		{contractId},
+		axiosConfig
+	);
+	return response;
+}
+
+export const sendContract = async (contractId, receiverEmail, mailSubject) => {
+	const axiosConfig = {
+		headers: {
+			authorization: `Bear ${access_token}`
+		}
+	};
+	const response = await axios.post(
+		`${config.backendBaseURL}/transactions/sending`,
+		{
+			contractId,
+			email: receiverEmail,
+			subject: mailSubject
+		},
+		axiosConfig
+	);
+	return response;
+}
