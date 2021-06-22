@@ -134,3 +134,35 @@ export const sendContract = async (contractId, receiverEmail, mailSubject) => {
 	);
 	return response;
 }
+
+export const verifyContract = async (formData) => {
+	const axiosConfig = {
+		headers: {
+			'content-type': 'multipart/form-data',
+			authorization: `Bear ${access_token}`
+		}
+	};
+	const response = await axios.post(
+		`${config.backendBaseURL}/signatures/verifyByFile`,
+		formData,
+		axiosConfig
+	);
+	return response;
+}
+
+export const destroyContract = async (contractId, receiverEmail) => {
+	const axiosConfig = {
+		headers: {
+			authorization: `Bear ${access_token}`
+		}
+	};
+	const response = await axios.post(
+		`${config.backendBaseURL}/transactions/destroy`,
+		{
+			contractId,
+			email: receiverEmail
+		},
+		axiosConfig
+	);
+	return response;
+}

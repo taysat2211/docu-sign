@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createRef } from 'react';
 import '../file-detail/Details.css';
-import { Button, Modal, Image } from 'react-bootstrap';
+import { Button, Modal, Image, Form } from 'react-bootstrap';
 import { Redirect, useParams } from 'react-router-dom';
 import SignaturePad from 'react-signature-canvas';
 import Signature from '../../components/Signature';
@@ -9,7 +9,7 @@ import { pdfjs } from 'react-pdf';
 import ControlPanel from '../../components/ControlPanel';
 import './Details.css';
 import Draggable from 'react-draggable';
-import { getContract, signContract, sendContract, } from '../../axios/contract';
+import { getContract, signContract, sendContract, verifyContract, destroyContract} from '../../axios/contract';
 import { getUserInfo, } from '../../axios/user';
 import Swal from 'sweetalert2';
 import Divider from '@material-ui/core/Divider';
@@ -51,6 +51,13 @@ const Detail = () => {
 		}
 	);
 
+	const [isReceivedContractModalShown, setIsReceivedContractModalShown] = useState(false);
+
+	const contractData = new FormData();
+	contractData.append('contract', null);
+
+	const [eSignature, setESignature] = useState('');
+
 	const clearSign = () => {
 		signPad.current.clear();
 	};
@@ -74,6 +81,7 @@ const Detail = () => {
 	const hideModel = () => {
 		setIsSendFileModalShow(false);
 		setIsSignatureModalShow(false);
+		setIsReceivedContractModalShown(false);
 	};
 
 	const showInfoModal = () => {
@@ -158,7 +166,7 @@ const Detail = () => {
 			return Swal.fire(
 				{
 					title: 'Cảnh báo',
-					text: 'Đang chờ đối tác một hợp đồng khác',
+					text: 'Đang chờ đối tác này ký một hợp đồng khác',
 					icon: 'warning',
 					confirmButtonText: 'Understood'
 				}
@@ -184,9 +192,35 @@ const Detail = () => {
 		)
 	}
 
+	const verifyContractClick = (event) => {
+		event.preventDefault();
+		setIsReceivedContractModalShown(true);
+	}
+
+	const onUploadedContractChange = (event) => {
+		event.preventDefault();
+		contractData.set('contract', event.target.files[0]);
+	}
+
+	const onFormsubmit = async (event) => {
+		event.preventDefault();
+		hideModel();
+		console.log(eSignature);
+		contractData.append('signature', eSignature);
+		contractData.append('email', fileInfo.recived.emailSender);
+		console.log(contractData);
+		const verification = await verifyContract(contractData);
+		console.log(verification);
+	}
+
+	const onDestroyContractClick = (event) => {
+		event.preventDefault();
+		console.log(fileInfo.status);
+		// const destruction = await destroyContract(contractId);
+	}
+
 	useEffect(async () => {
 		const user = await getUserInfo();
-		// console.log(user);
 		const userInfo = user.data;
 		setUser({name: userInfo.lastname + ' ' + userInfo.firstname, email: userInfo.email, phone: userInfo.phoneNumber, avatar: '/img_avatar.png', sign: ''});
 	}, []);
@@ -194,6 +228,7 @@ const Detail = () => {
 	useEffect(() => {
 		async function fetchData() {
 			const data = await getContract(contractId);
+			console.log(data);
 			setFileInfo(data.data.data);
 			// console.log(data.data.data.download);
 			// downloadFile(data.data.data.download);
@@ -202,6 +237,11 @@ const Detail = () => {
 	}, [contractId, isContractSigned]);
 
 	useEffect(async () => {
+		console.log(fileInfo);
+		// if (fileInfo.type === 'receiver') {
+		// 	const verification = await verifyContract(fileInfo.contractId, signature, email);
+		// 	console.log(verification);
+		// }
 		if (fileInfo.status === 'signed') {
 			return setIsContractSigned(true);
 		}
@@ -223,7 +263,7 @@ const Detail = () => {
 				<div className="col-sm-10 d-flex justify-content-between align-items-center border-start border-bottom">
 					<div className='container-fluid'>
 						<div className='row'>
-							<div className='col-sm-7'>
+							<div className='col-sm-8'>
 								<h1 id='contract-name'>Hợp đồng lao động.pdf</h1>
 								{fileInfo.type !== 'receiver' ? null : 
 									<>
@@ -232,7 +272,12 @@ const Detail = () => {
 									</>
 								}
 							</div>
-							<div className='col-sm-5 d-flex justify-content-evenly align-items-center'>
+							<div className='col-sm-4 d-flex justify-content-around align-items-center'>
+								<select class="form-select mr-3" aria-label="Default select example">
+									<option value="1" selected disabled>Chờ ký hợp đồng</option>
+									<option value="2" disabled>Đã ký hoàn tất</option>
+									<option value="3">Hủy hợp đồng</option>
+								</select>
 								<Button
 									type="button"
 									className="btn btn-primary"
@@ -240,13 +285,7 @@ const Detail = () => {
 									<i class="fas fa-check-square" style={{marginRight: '10px'}}/> 
 									Lưu và cập nhật
 								</Button>
-								<Button
-									type="button"
-									className="btn btn-primary"
-									onClick={onOpenSendContractModalClick}>
-									<i class="fas fa-paper-plane" style={{marginRight: '10px'}}/> 
-									Gửi hợp đồng
-								</Button>
+								
 							</div>
 						</div>
 					</div>
@@ -259,14 +298,9 @@ const Detail = () => {
 					<div class="list-group">
 						<Button
 							className="list-group-item list-group-item-action"
-							onClick={() => {
-								showInfoModal();
-							}}
+							onClick={showInfoModal}
 							draggable="true"
-							onMouseDown={(e) => {
-								onDragStart(e);
-							}}
-						>
+							onMouseDown={(e) => {onDragStart(e);}}>
 							<i className="fas fa-pen-fancy" style={{ marginRight: '1em' }} />
 							Thêm chữ ký
 						</Button>
@@ -278,6 +312,33 @@ const Detail = () => {
 							<i class="fas fa-history" style={{ marginRight: '1em' }}/>
 							Hoàn tác
 						</Button>
+						{fileInfo.type === 'sender' ? 
+							<Button
+								className="list-group-item list-group-item-action"
+								onClick={onDestroyContractClick}>
+								<i class="fas fa-window-close" style={{marginRight: '1em'}}></i>
+								Hủy hợp đồng
+							</Button>
+							:
+							(
+								fileInfo.type === 'receiver' ? 
+								<Button
+									className="list-group-item list-group-item-action"
+									onClick={verifyContractClick}>
+									<i class="fas fa-clipboard-check" style={{marginRight: '1em'}}></i>
+									Xác minh hợp đồng
+								</Button>
+								:
+								<div>
+									<Button
+										className="list-group-item list-group-item-action"
+										onClick={onOpenSendContractModalClick}>
+										<i class="fas fa-paper-plane" style={{marginRight: '1em'}}/> 
+										Gửi hợp đồng
+									</Button>
+								</div>
+							)
+						}
 					</div>
 				</div>
 				<div className="col-sm-8 px-3 py-3 file-content">
@@ -306,6 +367,34 @@ const Detail = () => {
 					<p>Lịch sử thay đổi</p>
 				</div>
 			</div>
+
+			<Modal show={isReceivedContractModalShown}
+				onHide={hideModel}
+				animation={false}
+				centered>
+					<Modal.Header closeButton>
+						<Modal.Title style={{ margin: 'auto' }} onChange={(e) => {onUploadedContractChange(e)}}>Thông tin hợp đồng nhận qua email</Modal.Title>
+					</Modal.Header>
+					<Form onSubmit={onFormsubmit}>
+						<Modal.Body>
+							
+							<Form.Group>
+								<Form.File id="" label="Tải lên hợp đồng" />
+							</Form.Group>
+							<Form.Group>
+								<Form.Label>Chữ ký điện tử</Form.Label>
+								<Form.Control type='input' onChange={(e) => {setESignature(e.target.value)}}/>
+							</Form.Group>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button
+								variant="primary"
+								type='submit'>
+								Xác minh
+							</Button>
+						</Modal.Footer>
+					</Form>
+			</Modal>
 
 			<Modal
 				show={isSignatureModalShow}
@@ -408,6 +497,7 @@ const Detail = () => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
+
 		</div>
 	);
 };
