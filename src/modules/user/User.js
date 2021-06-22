@@ -17,7 +17,7 @@ export default function User() {
   const imageHandler = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
-    formData.set('image', file);
+    formData.append('file',file);
     const axiosConfig = {
       headers: {
         'content-type': 'multipart/form-data',
