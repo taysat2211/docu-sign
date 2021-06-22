@@ -5,12 +5,14 @@ import './User.css';
 import Info from './Info';
 import UpdateInfo from './UpdateInfo';
 import axios from 'axios';
+const jwt = require('jsonwebtoken');
 
 const access_token = localStorage.getItem('access_token');
 
 export default function User() {
   const [userInfo, setUserInfo] = useState([]);
   const [show, setShow] = useState(true);
+  const [avatar, setAvatar] = useState('/img_avatar.png');
 
   const imageHandler = async (event) => {
     const file = event.target.files[0];
@@ -50,9 +52,25 @@ export default function User() {
     setShow(true);
   };
 
+  const checkAvatarUser = async () => {
+    const decoded = jwt.decode(access_token, { complete: true });
+    const uid = decoded.payload.id;
+
+    try {
+      const response = await axios.get(
+        `${config.backendBaseURL}/common/profile-image?userId=${uid}`
+      );
+    } catch (error) {
+      console.error('file chua co hinh anh');
+      return;
+    }
+    setAvatar(`${config.backendBaseURL}/common/profile-image?userId=${uid}`);
+  };
+
   useEffect(() => {
     getUser();
-  }, [show]);
+    checkAvatarUser();
+  }, [show, avatar]);
 
   return (
     <div className='info-user'>
@@ -66,14 +84,16 @@ export default function User() {
             <div>
               <h1>BestSign</h1>
             </div>
-            <img src='/img_avatar.png' className='avatar-user' />
-            <input
-              type='file'
-              name='image'
-              accept='image/*'
-              multiple={false}
-              onChange={imageHandler}
-            />
+            <div className='image-change'>
+              <img src={avatar} className='avatar-user' />
+              <input
+                type='file'
+                name='image'
+                accept='image/*'
+                multiple={false}
+                onChange={imageHandler}
+              />
+            </div>
           </div>
 
           <div className='container-info'>

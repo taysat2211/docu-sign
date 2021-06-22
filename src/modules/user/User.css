@@ -12,6 +12,12 @@
   margin: 0 auto;
 }
 
+.image-change {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .container-info {
   width: fit-content;
   padding: 1rem;
@@ -27,6 +33,8 @@
   size: 5rem;
   border-radius: 50%;
   width: 10rem;
+  height: 10rem;
+  object-fit: cover;
 }
 
 .flex-container {

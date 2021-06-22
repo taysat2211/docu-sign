@@ -1,4 +1,5 @@
 import React, { createRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import './Home.css';
 import { Document, Page } from 'react-pdf';
 import { Button } from 'react-bootstrap';
@@ -10,12 +11,16 @@ import AppContext from '../../components/appContext';
 import { useHistory } from 'react-router';
 import { getSingleContract, getContracts } from '../../axios/contract';
 import EmptyFileList from '../../components/emptyFileList/EmptyFilesList';
+import config from '../../config/default.json';
 import prettyBytes from 'pretty-bytes';
+const jwt = require('jsonwebtoken');
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
+const access_token = localStorage.getItem('access_token');
 const Home = () => {
   const history = useHistory();
+
+  const [userInfo, setUserInfo] = useState([]);
 
   const [numPages, setNumPages] = useState(null);
 
@@ -26,6 +31,8 @@ const Home = () => {
   const [contract, setContract] = useState({});
 
   const [filter, setFilter] = useState({ type: 'receiver' });
+
+  const [avatar, setAvatar] = useState('/img_avatar.png');
 
   const [filterButtons, setFilterButtons] = useState([
     {
@@ -175,6 +182,36 @@ const Home = () => {
     // if (contracts.data.data !== null) setListFile(contracts.data.data);
   };
 
+  const getUser = async () => {
+    const axiosConfig = {
+      headers: {
+        authorization: `Bear ${access_token}`,
+      },
+    };
+    const response = await axios.get(
+      `${config.backendBaseURL}/users/me`,
+      axiosConfig
+    );
+    const emailUser = response.data.email;
+    var emailName = emailUser.substr(0, emailUser.indexOf('@'));
+    setUserInfo(emailName);
+  };
+
+  const checkAvatarUser = async () => {
+    const decoded = jwt.decode(access_token, { complete: true });
+    const uid = decoded.payload.id;
+
+    try {
+      const response = await axios.get(
+        `${config.backendBaseURL}/common/profile-image?userId=${uid}`
+      );
+    } catch (error) {
+      console.error('file chua co hinh anh');
+      return;
+    }
+    setAvatar(`${config.backendBaseURL}/common/profile-image?userId=${uid}`);
+  };
+
   useEffect(async () => {
     const data = await getContracts(filter);
     console.log(data.data.data);
@@ -188,6 +225,11 @@ const Home = () => {
     if (contracts.data.data !== null) setListFile(contracts.data.data);
     // console.log(filter);
   }, [filter]);
+
+  useEffect(() => {
+    checkAvatarUser();
+    getUser();
+  }, [avatar]);
 
   return (
     <div className='container-fluid'>
@@ -293,9 +335,9 @@ const Home = () => {
               <div className='HelloText'>
                 Xin chào!
                 <br />
-                Cao Phương Đức
+                {userInfo}
               </div>
-              <img src='img_avatar.png' alt='Avatar' className='avatar' />
+              <img src={avatar} alt='Avatar' className='avatar' />
             </div>
           </div>
 
